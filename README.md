@@ -71,7 +71,8 @@ downloader(
     verbose=True,
     badsites=["stock.adobe.com", "shutterstock.com"],
     name="Puppy",
-    max_workers=8  # Parallel downloads
+    max_workers=8,  # Parallel downloads
+    engine="google"
 )
 ```
 
@@ -146,7 +147,8 @@ downloader(
     limit=50,
     filter="transparent",
     max_workers=8,
-    output_dir="logos"
+    output_dir="logos",
+    engine="google"
 )
 ```
 

@@ -4,6 +4,7 @@ import argparse
 import logging
 from pathlib import Path
 from bing import Bing
+from .google import Google
 from tqdm import tqdm
 
 
@@ -16,7 +17,8 @@ def downloader(query:str,
                 filter:str="", 
                 verbose:bool=True, 
                 badsites:list=[], 
-                name:str='Image', max_workers:int=4) -> int:
+                name:str='Image',
+                max_workers:int=4, engine:str="bing") -> int:
     """
     Download images using the Bing image scraper.
     
@@ -61,22 +63,36 @@ def downloader(query:str,
             pbar.n = download_count
             pbar.refresh()
 
-        # Initialize and run Bing downloader with parallel processing
-        bing = Bing(
-            query=query, 
-            limit=limit, 
-            output_dir=image_dir, 
-            adult=adult, 
-            timeout=timeout, 
-            filter=filter, 
-            verbose=verbose, 
-            badsites=badsites, 
-            name=name,
-            max_workers=max_workers
-        )
-        # Type annotation is ignored in runtime
-        bing.download_callback = update_progress_bar  # type: ignore
-        bing.run()
+        if engine.lower() == "bing":
+            # Initialize and run Bing downloader with parallel processing
+            bing = Bing(
+                query=query, 
+                limit=limit, 
+                output_dir=image_dir, 
+                adult=adult, 
+                timeout=timeout, 
+                filter=filter, 
+                verbose=verbose, 
+                badsites=badsites, 
+                name=name,
+                max_workers=max_workers
+            )
+            # Type annotation is ignored in runtime
+            bing.download_callback = update_progress_bar  # type: ignore
+            bing.run()
+        else:
+            google = Google(
+                query=query,
+                limit=limit,
+                output_dir=image_dir,
+                adult=adult,
+                timeout=timeout,
+                filter=filter,
+                verbose=verbose,
+                badsites=badsites,
+                name=name)
+            google.download_callback = update_progress_bar
+            google.run()
 
     # After download completes, offer to show sources
     if input('\nDo you wish to see the image sources? (Y/N): ').lower() == 'y':
