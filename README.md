@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.svg" alt="Better Bing Image Downloader Banner" width="100%" />
+</p>
+
 # Better Bing Image Downloader
 
 A powerful Python tool for downloading images from Bing and Google image search engines.
